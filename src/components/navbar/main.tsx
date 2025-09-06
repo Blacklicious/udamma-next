@@ -25,9 +25,9 @@ export default function NavbarMain() {
               <div className="flex items-center justify-start">
                 <Link href="/">
                   <img
-                    src="/logo.svg"
+                    src="/img/logo.jpeg"
                     alt="Logo"
-                    className="h-10 w-auto bg-white rounded-full border cursor-pointer"
+                    className="h-14 lg:h-20 w-auto bg-white rounded-2xl border-2 border-amber-300 cursor-pointer"
                   />
                 </Link>
               </div>
