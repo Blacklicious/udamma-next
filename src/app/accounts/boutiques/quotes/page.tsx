@@ -4,19 +4,37 @@ import React, { useEffect, useState } from 'react';
 import QuotesTable from './QuotesTable';
 import QuoteDetailsModal from './QuoteDetailsModal';
 import CreateQuoteModal from './CreateQuoteModal';
+import type { Member } from '../../members/page';
+import type { Boutique } from '../page';
+import type { Product } from '../products/productsList';
+
+export interface Quote  {
+  id: number;
+  customer: string;
+  boutique: string;
+  status: string;
+  created_at: string;
+  items: {
+    id: number;
+    product: string;
+    quantity: number;
+    price: string;
+    status: string;
+  }[];
+}
 
 const QuotesPage = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const [quotes, setQuotes] = useState<any[]>([]);
+  const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedQuote, setSelectedQuote] = useState<any | null>(null);
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   // For create quote form
-  const [members, setMembers] = useState<any[]>([]);
-  const [boutiques, setBoutiques] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [boutiques, setBoutiques] = useState<Boutique[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -39,7 +57,7 @@ const QuotesPage = () => {
     fetchAll();
   }, [API_URL]);
 
-  const openQuoteModal = (quote: any) => {
+  const openQuoteModal = (quote: Quote) => {
     setSelectedQuote(quote);
     setModalOpen(true);
   };

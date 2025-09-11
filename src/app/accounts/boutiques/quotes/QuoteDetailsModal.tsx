@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Quote } from './page';
 
 const QuoteDetailsModal = ({
   open,
@@ -6,7 +7,7 @@ const QuoteDetailsModal = ({
   onClose,
 }: {
   open: boolean;
-  quote: any | null;
+  quote: Quote | null;
   onClose: () => void;
 }) => {
   if (!open || !quote) return null;
@@ -35,7 +36,7 @@ const QuoteDetailsModal = ({
         <div className="mb-4">
           <strong>Items:</strong>
           <ul className="mt-2 space-y-2">
-            {quote.items?.map((item: any) => (
+            {quote.items?.map(item => (
               <li key={item.id} className="border p-2 rounded flex justify-around hover:border-amber-300 hover:bg-gray-100">
                 <div><strong>{item.product}</strong> </div>
                 <div><strong>Quantity:</strong> {item.quantity}</div>

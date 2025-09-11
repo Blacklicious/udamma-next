@@ -6,22 +6,32 @@ import BoutiqueProductManager from './products/page'
 import BoutiqueMembersList from './customers/pages'
 import QuotesPage from './quotes/page'
 import OrdersPage from './orders/page'
-import { FaBoxOpen, FaUsers, FaFileInvoiceDollar, FaFileAlt, FaMoneyCheckAlt, FaTruck, FaUndo } from 'react-icons/fa'
+import { FaBoxOpen, FaUsers, FaFileInvoiceDollar, FaFileAlt, FaMoneyCheckAlt } from 'react-icons/fa'
 import PaymentsPage from './orders/payments/page'
 
+export interface Boutique {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  website?: string;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
 const BoutiqueAccount = () => {
-  const [loading, setLoading] = React.useState(true);
-
   // state for showing different sections
   const [showProducts, setShowProducts] = React.useState(true);
   const [showCustomers, setShowCustomers] = React.useState(false);
   const [showQuotes, setShowQuotes] = React.useState(false);
   const [showOrders, setShowOrders] = React.useState(false);
   const [showPayments, setShowPayments] = React.useState(false);
-  const [showInvoices, setShowInvoices] = React.useState(false);
-  const [showShipping, setShowShipping] = React.useState(false);
-  const [showReturns, setShowReturns] = React.useState(false);
+  const [, setShowInvoices] = React.useState(false);
+  const [, setShowShipping] = React.useState(false);
+  const [, setShowReturns] = React.useState(false);
+
 
 
   // handle navbar logic
@@ -29,10 +39,10 @@ const BoutiqueAccount = () => {
   const handleShowCustomers = () => { setShowCustomers(!showCustomers); setShowProducts(false); setShowQuotes(false); setShowOrders(false); setShowInvoices(false); setShowPayments(false); setShowShipping(false); setShowReturns(false); }
   const handleShowQuotes = () => { setShowQuotes(!showQuotes); setShowProducts(false); setShowCustomers(false); setShowOrders(false); setShowInvoices(false); setShowPayments(false); setShowShipping(false); setShowReturns(false); }
   const handleShowOrders = () => { setShowOrders(!showOrders); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowInvoices(false); setShowPayments(false); setShowShipping(false); setShowReturns(false); }
-  const handleShowInvoices = () => { setShowInvoices(!showInvoices); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowPayments(false); setShowShipping(false); setShowReturns(false); }
+  //const handleShowInvoices = () => { setShowInvoices(!showInvoices); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowPayments(false); setShowShipping(false); setShowReturns(false); }
   const handleShowPayments = () => { setShowPayments(!showPayments); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowInvoices(false); setShowShipping(false); setShowReturns(false); }
-  const handleShowShipping = () => { setShowShipping(!showShipping); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowInvoices(false); setShowPayments(false); setShowReturns(false); }
-  const handleShowReturns = () => { setShowReturns(!showReturns); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowInvoices(false); setShowPayments(false); setShowShipping(false); }
+  //const handleShowShipping = () => { setShowShipping(!showShipping); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowInvoices(false); setShowPayments(false); setShowReturns(false); }
+  //const handleShowReturns = () => { setShowReturns(!showReturns); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowInvoices(false); setShowPayments(false); setShowShipping(false); }
 
   return (
     <div className='boutique-account-page w-full px-2 bg-[#F9F6F1] rounded-3xl pb-6'>

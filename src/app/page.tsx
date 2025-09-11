@@ -1,6 +1,5 @@
 "use client";
 
-// @ts-ignore: no type declarations for framer-motion in this project
 import { motion } from "framer-motion";
 import NavbarMain from "@/components/navbar/main";
 import BottomNavBar from "@/components/navbar/main_bottom";

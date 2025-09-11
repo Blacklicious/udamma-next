@@ -1,4 +1,9 @@
+'use client';
+
 import React, { useState } from 'react';
+import type { Member } from '../../members/page';
+import type { Boutique } from '../page';
+import type { Product } from '../products/productsList';
 
 const CreateQuoteModal = ({
   open,
@@ -10,9 +15,9 @@ const CreateQuoteModal = ({
 }: {
   open: boolean;
   onClose: () => void;
-  members: any[];
-  boutiques: any[];
-  products: any[];
+  members: Member[];
+  boutiques: Boutique[];
+  products: Product[];
   onSuccess: () => void;
 }) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -24,11 +29,15 @@ const CreateQuoteModal = ({
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
-  const handleFormChange = (field: string, value: any) => {
+  const handleFormChange = (field: keyof typeof form, value: string | number) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleItemChange = (idx: number, field: string, value: any) => {
+  const handleItemChange = (
+    idx: number,
+    field: keyof typeof form.items[number],
+    value: string | number
+  ) => {
     setForm((prev) => {
       const items = [...prev.items];
       items[idx] = { ...items[idx], [field]: value };
@@ -78,8 +87,12 @@ const CreateQuoteModal = ({
       setFormSuccess('Quote created successfully!');
       onClose();
       onSuccess();
-    } catch (err: any) {
-      setFormError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setFormError(err.message);
+      } else {
+        setFormError('An unexpected error occurred');
+      }
     }
   };
 

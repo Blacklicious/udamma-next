@@ -1,6 +1,7 @@
 import React from 'react';
+import { Quote } from './page';
 
-const QuotesTable = ({ quotes, onQuoteClick }: { quotes: any[], onQuoteClick: (q: any) => void }) => (
+const QuotesTable = ({ quotes, onQuoteClick }: { quotes: Quote[], onQuoteClick: (q: Quote) => void }) => (
   <table className="w-full bg-white rounded-lg shadow mb-8">
     <thead>
       <tr>

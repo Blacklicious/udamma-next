@@ -1,16 +1,15 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import ProductUpdateForm from './productUpdateForm';
 
-const ProductsManagerList = () => {
-  
-  interface Category {
-    id: number;
-    name: string;
-  }
+export interface Category {
+  id: number;
+  name: string;
+}
 
-  interface Product {
+export interface Product {
     id: number;
     boutique: string;
     category: Category; // ✅ fixed — now a single object (dont use array[])
@@ -22,18 +21,24 @@ const ProductsManagerList = () => {
     quantity: string;
     tags: string;
     notes: string;
-    img1: File | null;
-    img2: File | null;
-    img3: File | null;
-    img4: File | null;
-    img5: File | null;
-    img6: File | null;
+    img1: string | null;
+    img2: string | null;
+    img3: string | null;
+    img4: string | null;
+    img5: string | null;
+    img6: string | null;
+    status: string;
+    reviews: number | null;
+    rating: number | null;
+    created_at: string;
+    updated_at: string;
   }
 
+const ProductsManagerList = () => {
   const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [, setError] = React.useState<string | null>(null);
   const [products, setProducts] = React.useState<Product[]>([]);
-  const [categories, setCategories] = React.useState<string[]>([]);
+  const [, setCategories] = React.useState<string[]>([]);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
     
     // 🔁 Fetch products and categories on mount
@@ -47,8 +52,7 @@ const ProductsManagerList = () => {
       }
       const fetchData = async () => {
         try {
-          const token = sessionStorage.getItem('access_token');
-  
+          //const token = sessionStorage.getItem('access_token');
           const [productsRes, categoriesRes] = await Promise.all([
             fetch(`${API_URL}/products/api/`, {
               headers: {
@@ -64,12 +68,11 @@ const ProductsManagerList = () => {
             throw new Error('Failed to fetch data');
           }
   
-          const productsData = await productsRes.json();
-          const categoriesData = await categoriesRes.json();
-  
+          const productsData: Product[] = await productsRes.json();
+          const categoriesData: Category[] = (await categoriesRes.json()) as Category[];
+
           setProducts(productsData);
-          setProducts(productsData);
-          setCategories(categoriesData.map((cat: any) => cat.name)); // assuming each category has a `name`
+          setCategories(categoriesData.map(cat => cat.name));
         } catch (err) {
           console.error(err);
           setError('Unable to load store data. Please try again.');
@@ -79,7 +82,7 @@ const ProductsManagerList = () => {
       };
   
       fetchData();
-    }, []);
+    }, [API_URL]);
     
 
   if (loading) {
@@ -116,13 +119,16 @@ const ProductsManagerList = () => {
                 <span>Uncategorized</span>
               )}
                 </div>
-  
             {/* Image */}
-            <img
-              src={`${API_URL}${product.img2}`}
-              alt={product.name}
-              className="w-full object-cover rounded-md my-3"
-            />
+            {product.img2 && (
+              <Image
+                src={`${API_URL}${product.img2}`}
+                alt={product.name}
+                className="w-full object-cover rounded-md my-3"
+                width={400}
+                height={400}
+              />
+            )}
   
             {/* Price + Quantity */}
             <div className="flex justify-between items-center text-sm text-gray-600">

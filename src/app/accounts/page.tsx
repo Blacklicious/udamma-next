@@ -50,7 +50,7 @@ export default function AccountPage() {
 				})
 				.finally(() => setLoading(false));
 		}
-	}, []);
+	}, [API_URL]);
 
 	if (loading) return <div className="p-6 text-center text-gray-500">Loading account...</div>;
 

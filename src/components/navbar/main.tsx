@@ -1,11 +1,9 @@
-'use client';
 // File: src/app/accounts/page.tsx
-import React from "react";
 // Make sure you have these imports at the top of your file:
-import { useState } from "react";
-import NavbarMainDrawer from "./main_drawer";
+'use client';
+import React from "react";
 import { FaShoppingBag } from "react-icons/fa";
-import Link from "next/link";
+import Image from "next/image";
 
 
 // Define simple inline SVG icons instead of importing from external library
@@ -23,13 +21,13 @@ export default function NavbarMain() {
             <div className="flex  p-1 rounded-2xl justify-between items-center">
               {/* Column 1: Logo */}
               <div className="flex items-center justify-start">
-                <Link href="/">
-                  <img
+                  <Image
                     src="/img/logo.jpeg"
                     alt="Logo"
+                    width={56}
+                    height={56}
                     className="h-14 lg:h-20 w-auto bg-white rounded-2xl border-2 border-amber-300 cursor-pointer"
                   />
-                </Link>
               </div>
               {/* Column 2: Site name */}
               <div className="flex items-center justify-center">

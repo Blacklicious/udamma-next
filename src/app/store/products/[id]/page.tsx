@@ -4,11 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import NavbarMain from '@/components/navbar/main';
 import BottomNavBar from '@/components/navbar/main_bottom';
+import Image from 'next/image';
+import type { Product } from '../../../accounts/boutiques/products/productsList';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const searchParams = useSearchParams();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState('L');
   const [quantity, setQuantity] = useState(1);
 
@@ -36,7 +38,8 @@ const ProductDetailPage = () => {
 
   if (!product) return <div className="text-center p-6">Loading...</div>;
 
-  const images = [product.img1, product.img2, product.img3, product.img4, product.img5, product.img6].filter(Boolean);
+  const images = [product.img1, product.img2, product.img3, product.img4, product.img5, product.img6]
+    .filter((img): img is string => Boolean(img));
 
   return (
     <>
@@ -44,11 +47,12 @@ const ProductDetailPage = () => {
       <BottomNavBar />
       <div className="max-w-md mx-auto px-4 pt-6 pb-28">
         {/* Main Image */}
-        <div className="relative rounded-2xl overflow-hidden">
-          <img
+        <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
+          <Image
             src={product.img1 ? `${API_URL}${product.img1}` : 'https://via.placeholder.com/400x300'}
             alt={product.name}
-            className="w-full object-cover aspect-[4/5] rounded-xl"
+            fill
+            className="object-cover rounded-xl"
           />
           <button className="absolute top-4 right-4 bg-white/80 px-2 py-1 rounded-full shadow">
             ❤️
@@ -56,12 +60,13 @@ const ProductDetailPage = () => {
         </div>
 
         {/* Thumbnails */}
-        <div className="flex gap-2 mt-2 overflow-x-auto">
           {images.slice(1, 5).map((img: string, index: number) => (
-            <img
+            <Image
               key={index}
               src={`${API_URL}${img}`}
-              className="w-16 h-16 object-cover rounded-lg border"
+              width={64}
+              height={64}
+              className="object-cover rounded-lg border"
               alt={`Thumb ${index + 2}`}
             />
           ))}
@@ -137,7 +142,6 @@ const ProductDetailPage = () => {
             </button>
           </div>
         </div>
-      </div>
     </>
   );
 };

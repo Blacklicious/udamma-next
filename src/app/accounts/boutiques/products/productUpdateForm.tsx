@@ -1,29 +1,5 @@
 import React, { ChangeEvent, FormEvent } from 'react'
-
-  interface Category {
-    id: number;
-    name: string;
-  }
-
-  interface Product {
-    id: number;
-    category: Category | null; // ✅ allow null
-    boutique: string;
-    parent_product: string;
-    name: string;
-    description: string;
-    price: number;
-    price_discount: string;
-    quantity: string;
-    tags: string;
-    notes: string;
-    img1: File | null;
-    img2: File | null;
-    img3: File | null;
-    img4: File | null;
-    img5: File | null;
-    img6: File | null;
-  }
+import type {Product, Category} from './productsList'
 
 interface ProductUpdateFormProps {
 	product: Product;
@@ -77,10 +53,12 @@ const ProductUpdateForm: React.FC<ProductUpdateFormProps> = ({ product }) => {
 		const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 			const { name, value } = e.target;
       // Special case: if the changed field is `category`, find and set the full object
-      if (name === 'category') {
-        const selectedCategory = productsCategories.find(cat => cat.id.toString() === value);
-        setValues(prev => ({ ...prev, category: selectedCategory || null }));
-      } else {
+	  if (name === 'category') {
+		const selectedCategory = productsCategories.find(cat => cat.id.toString() === value);
+		if (selectedCategory) {
+		  setValues(prev => ({ ...prev, category: selectedCategory }));
+		}
+	  } else {
         setValues(prev => ({ ...prev, [name]: value }));
       }
       
@@ -107,9 +85,14 @@ const ProductUpdateForm: React.FC<ProductUpdateFormProps> = ({ product }) => {
           } else if (key.startsWith('img') && typeof val === 'string') {
             // Skip existing file paths like "/media/img2.jpg"
             return;
-          } else {
-            formData.append(key, val as any);
-          }
+		  } else {
+			// append files as Blobs and all other values as strings
+			if (val instanceof File) {
+			  formData.append(key, val);
+			} else {
+			  formData.append(key, String(val));
+			}
+		  }
         }
       });
       

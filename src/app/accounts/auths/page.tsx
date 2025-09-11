@@ -1,6 +1,6 @@
 'use client';
 import NavbarMain from '@/components/navbar/main';
-import React, { useState } from 'react';
+import React from 'react';
 import FormLogin from './login';
 import FormUserRegistration from './registration/users';
 
@@ -11,7 +11,6 @@ const AccountAuth = () => {
   const [showResetPassword, setShowResetPassword] = React.useState(false);
   const [showVerifyEmail, setShowVerifyEmail] = React.useState(false);
   const [showVerifyPhone, setShowVerifyPhone] = React.useState(false);
-  const [showVerifyAccount, setShowVerifyAccount] = React.useState(false);
 
   return (
     <div className='text-gray-800 bg-gray-50 min-h-screen'>
@@ -22,7 +21,7 @@ const AccountAuth = () => {
               <div className="w-full max-w-md p-4 bg-gray-100 shadow-xl rounded-lg ">
                 <FormLogin />
                 <p className='flex  gap-2 mt-3 text-gray-500 items-center justify-center text-md'>
-                  <span className='text-gray-500 '> Don't have an account?</span>
+                  <span className='text-gray-500'> Don&apos;t have an account?</span>
                   <span className='font-bold text-blue-500 hover:text-blue-700 cursor-pointer'
                     onClick={() => { setShowLogin(false); setShowRegistration(true); setShowForgotPassword(false);
                       setShowResetPassword(false); setShowVerifyEmail(false); setShowVerifyPhone(false); }}

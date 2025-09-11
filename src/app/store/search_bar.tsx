@@ -1,26 +1,27 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { FiFilter } from 'react-icons/fi';
+import type { Product, Category } from '../accounts/boutiques/products/productsList';
 
 interface SearchBarProps {
-  products: any[];
-  categories: string[];
-  onFilter: (filtered: any[]) => void;
+  products: Product[];
+  categories: Category[];
+  onFilter: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ products, categories, onFilter }) => {
   const [query, setQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
 	useEffect(() => {
 		const filtered = products.filter((product) => {
-			const matchCategory = selectedCategory ? product.category === selectedCategory : true;
+      const matchCategory = selectedCategory ? product.category.id === selectedCategory.id : true;
 			const matchQuery = product.name.toLowerCase().includes(query.toLowerCase());
 			return matchCategory && matchQuery;
 		});
 	
 		onFilter(filtered);
-	}, [query, selectedCategory, products]);
+	}, [query, selectedCategory, products, onFilter]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full pt-4 bg-[#F9F6F1] rounded-3xl">
@@ -59,17 +60,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ products, categories, onFilter })
 
       {/* Category Filters */}
       <div className="flex gap-3 mt-2 w-full overflow-x-auto px-4 rounded-full bg-[#F9F6F1] py-1">
-        {categories.map((label) => (
+        {categories.map((category) => (
           <div
-            key={label}
-            onClick={() => setSelectedCategory(label === selectedCategory ? null : label)}
+            key={category.id}
+            onClick={() => setSelectedCategory(category === selectedCategory ? null : category)}
             className={`px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors duration-200 whitespace-nowrap
-              ${label === selectedCategory
+              ${category === selectedCategory
                 ? 'bg-yellow-700 text-white'
                 : 'bg-[#C9A44C] text-white hover:bg-yellow-600'}
             `}
           >
-            {label}
+            {category.name}
           </div>
         ))}
       </div>

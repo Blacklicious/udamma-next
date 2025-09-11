@@ -5,36 +5,9 @@ import {
 } from 'react-icons/fa';
 import { GiArmBandage, GiBodyHeight, GiLeg } from 'react-icons/gi';
 import { TbRulerMeasure } from 'react-icons/tb';
+import type { BodyProfile } from '../page';
 
-interface BodyProfile {
-  id: number;
-  member: any;
-  height?: string;
-  weight?: string;
-  neck?: string;
-  shoulder_width?: string;
-  bicep?: string;
-  arm_length?: string;
-  sleeve_length?: string;
-  wrist?: string;
-  back_length?: string;
-  torso_length?: string;
-  chest?: string;
-  bust?: string;
-  waist?: string;
-  front_rise?: string;
-  crotch_depth?: string;
-  hips?: string;
-  thigh?: string;
-  knee?: string;
-  calf?: string;
-  ankle?: string;
-  inseam?: string;
-  skirt_length?: string;
-  dress_length?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+
 
 const measurementMeta: {
   key: keyof BodyProfile;
@@ -114,8 +87,12 @@ const EditableMemberDetailsBodyShape = ({
       }
 
       setSuccess('Body measurements updated successfully!');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }
@@ -149,7 +126,11 @@ const EditableMemberDetailsBodyShape = ({
               </div>
               <input
                 type="text"
-                value={formData[key] ?? ''}
+                value={
+                  typeof formData[key] === 'string' || typeof formData[key] === 'number'
+                    ? formData[key]
+                    : ''
+                }
                 onChange={(e) => handleChange(key, e.target.value)}
                 className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder={`Enter ${label.toLowerCase()}`}

@@ -3,28 +3,29 @@
 import React, { useEffect, useState } from 'react';
 import MemberDetailsBodyShape from './details/MembersBodyShape';
 import { FaCheckCircle, FaUser, FaMapMarkerAlt, FaEnvelope } from 'react-icons/fa';
+import Image from 'next/image';
 
-interface User {
+export interface User {
   username: string;
   first_name: string;
   last_name: string;
   email: string;
 }
 
-interface Member {
+export interface Member {
   id: number;
   avatar?: string;
   bio?: string;
   phone?: string;
   address?: string;
   user: User;
-  social_media?: any;
+  social_media?: Record<string, unknown>;
   created_by?: number;
   created_at?: string;
   updated_at?: string;
 }
 
-interface BodyProfile {
+export interface BodyProfile {
   id: number;
   member: Member;
   height?: string;
@@ -84,8 +85,12 @@ const MemberAccountDetails = () => {
         const data: ApiResponse = await res.json();
         setMember(data.member);
         setBodyProfile(data.body_profile || null);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError(String(err));
+        }
       } finally {
         setLoading(false);
       }
@@ -101,13 +106,13 @@ const MemberAccountDetails = () => {
   return (
     <div className=" p-4 mb-20 flex flex-col lg:flex-row items-start gap-4 border-amber-400 border-2 rounded-4xl bg-gray-200/70 ]">
       <div className="w-full lg:w-[25%] bg-white rounded-3xl shadow-lg p-3 flex flex-col items-center text-center h-[60vh] overflow-y-auto">
-        {/* Avatar */}
         {member.avatar && (
           <div className="w-full h-62 rounded-2xl overflow-hidden mb-4 relative">
-            <img
-              src={member.avatar.startsWith('http') ? member.avatar : `${API_URL}${member.avatar}`}
+            <Image
+              src={member.avatar!.startsWith('http') ? member.avatar! : `${API_URL!}${member.avatar!}`}
               alt="Member Avatar"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
         )}

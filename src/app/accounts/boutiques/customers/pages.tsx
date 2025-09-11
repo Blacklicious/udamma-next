@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface User {
   username: string;
@@ -22,7 +23,7 @@ const BoutiqueMembersList = ({ boutiqueId }: { boutiqueId: number }) => {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -35,8 +36,9 @@ const BoutiqueMembersList = ({ boutiqueId }: { boutiqueId: number }) => {
         if (!res.ok) throw new Error('Failed to fetch members');
         const data = await res.json();
         setMembers(data.members || []);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -48,24 +50,41 @@ const BoutiqueMembersList = ({ boutiqueId }: { boutiqueId: number }) => {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!members.length) return <div>No members linked to this boutique.</div>;
 
+  const getAvatarUrl = (avatar: string) => {
+    if (/^https?:\/\//i.test(avatar)) {
+      return avatar;
+    }
+    return `${API_URL}${avatar}`;
+  };
+
   return (
     <div className="p-4">
       <ul className="space-y-4">
         {members.map((member) => (
-          <li key={member.id} className="flex items-center gap-4 bg-white p-4 rounded-lg shadow">
+          <li key={member.id} className="flex items-center space-x-4">
             {member.avatar && (
-              <img
-                src={member.avatar.startsWith('http') ? member.avatar : `${API_URL}${member.avatar}`}
-                alt={member.user.first_name}
-                className="w-12 h-12 rounded-full object-cover"
-              />
+              <div className="flex-shrink-0">
+                <Image
+                  src={getAvatarUrl(member.avatar)}
+                  alt={member.user.first_name}
+                  width={48}
+                  height={48}
+                  className="rounded-full object-cover"
+                />
+              </div>
             )}
             <div>
-              <div className="font-semibold">{member.user.first_name} {member.user.last_name}</div>
-              <div className="text-sm text-gray-500">{member.user.email}</div>
-              <div className="text-sm">{member.phone}</div>
-              <div className="text-sm">{member.address}</div>
-              <div className="text-sm hidden lg:block">{member.bio}</div>
+              <div className="font-semibold">
+                {member.user.first_name} {member.user.last_name}
+              </div>
+              <div className="text-sm text-gray-500">
+                {member.user.email}
+              </div>
+              {member.phone && <div className="text-sm">{member.phone}</div>}
+              {member.address && <div className="text-sm">{member.address}</div>}
+              {member.bio && (
+                <div className="text-sm hidden lg:block">{member.bio}</div>
+              )}
             </div>
           </li>
         ))}

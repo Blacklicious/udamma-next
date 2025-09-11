@@ -1,11 +1,10 @@
 import React from 'react'
-import { FiPlus } from 'react-icons/fi'
 import ProductsManagerList from './productsList'
 import BoutiqueProductsForm from './productsForm';
 
 const BoutiqueProductManager = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const [loading, setLoading] = React.useState(true);
+  //const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  //const [loading, setLoading] = React.useState(true);
 
   return (
     <div className='products-manager-content flex flex-col gap-4 '>

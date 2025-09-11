@@ -1,10 +1,6 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-
-interface Category {
-	id: string;
-	name: string;
-}
+import type {Product, Category} from './productsList'
 
 interface ProductFormValues {
 	boutique: string;
@@ -44,12 +40,12 @@ const initialValues: ProductFormValues = {
   img5: null,
   img6: null,
 };
-
+//const [products, setProducts] = useState<Product[]>([]);
 const BoutiqueProductsForm: React.FC = () => {
 	const API_URL = process.env.NEXT_PUBLIC_API_URL;
 	const [loading, setLoading] = useState(true);
 	const [showForm, setShowForm] = useState(false);
-	const [products, setProducts] = useState<any[]>([]);
+	const [products, setProducts] = useState<Product[]>([]);
 	const [productsCategories, setProductsCategories] = useState<Category[]>([]);
   const [values, setValues] = useState<ProductFormValues>(initialValues);
   const [submitting, setSubmitting] = useState(false);
@@ -108,12 +104,13 @@ const BoutiqueProductsForm: React.FC = () => {
 		const formData = new FormData();
 		Object.entries(values).forEach(([key, val]) => {
 		  if (val !== null) {
-        if (key === "category") {
-          formData.append("category_id", val);
-        } else {
-          formData.append(key, val as any);
-        }
-        
+		if (key === "category") {
+		  formData.append("category_id", val);
+		} else if (typeof val === 'number') {
+		  formData.append(key, val.toString());
+		} else {
+		  formData.append(key, val);
+		}
 		  }
 		});
 

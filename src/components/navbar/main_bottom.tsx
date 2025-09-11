@@ -1,7 +1,7 @@
 'use client';
 // File: src/app/accounts/auths/page.tsx
 import React, { useState } from "react";
-import { FaHome, FaHeart, FaShoppingBag, FaUser } from "react-icons/fa";
+import { FaShoppingBag, FaUser } from "react-icons/fa";
 import NavbarMainDrawer from "./main_drawer";
 import { BsMenuButtonWide, BsFillPostcardHeartFill } from "react-icons/bs";
 import { RiHomeSmile2Fill } from "react-icons/ri";
