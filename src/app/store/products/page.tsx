@@ -1,23 +1,46 @@
-import React from 'react';
-import ProductListClient from './ProductListClient';
+'use client';
 
-// Function to fetch data on the server
-async function getProducts() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  try {
-    const res = await fetch(`${API_URL}/api/products/`);
-    if (!res.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-}
+import React, { useEffect, useState } from 'react';
+import SearchBar from '@/components/store/SearchBar';
+import type { Product, Category } from '../../accounts/boutiques/products/productsList';
 
-export default async function Page() {
-  const products = await getProducts();
-  return <ProductListClient products={products} />;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+
+const ProductPage = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [prodRes, catRes] = await Promise.all([
+          fetch(`${API_URL}/products/api/`),
+          fetch(`${API_URL}/products/categories/api/`)
+        ]);
+
+        const productsData = await prodRes.json();
+        const categoriesData = await catRes.json();
+
+        setProducts(productsData);
+        setCategories(categoriesData);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <p className="p-6 text-center">Loading...</p>;
+
+  return (
+    <div className="px-4">
+      <SearchBar products={products} categories={categories} />
+    </div>
+  );
+};
+
+export default ProductPage;

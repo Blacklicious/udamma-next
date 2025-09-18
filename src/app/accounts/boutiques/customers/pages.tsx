@@ -58,18 +58,19 @@ const BoutiqueMembersList = ({ boutiqueId }: { boutiqueId: number }) => {
   };
 
   return (
-    <div className="p-4">
-      <ul className="space-y-4">
+    <div className="py-4 ">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4">
         {members.map((member) => (
-          <li key={member.id} className="flex items-center space-x-4">
+          <li key={member.id} className="flex items-center gap-4 bg-white p-2 rounded-3xl shadow h-min
+           hover:scale-[1.02] transition">
             {member.avatar && (
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 ">
                 <Image
                   src={getAvatarUrl(member.avatar)}
                   alt={member.user.first_name}
-                  width={48}
-                  height={48}
-                  className="rounded-full object-cover"
+                  width={108}
+                  height={208}
+                  className="rounded-2xl object-cover h-[150px]"
                 />
               </div>
             )}

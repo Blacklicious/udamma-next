@@ -103,8 +103,8 @@ const EditableMemberDetailsBodyShape = ({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6">
-      <h3 className="font-black text-xl mb-4">Edit Body Measurements</h3>
+    <form onSubmit={handleSubmit} className="mt-3">
+      <h3 className=" bg-gray-100 p-2 rounded-lg  px-3 font-black text-xl mb-2 shadaw-sm">Edit Body Measurements</h3>
       {loading && (
         <div className="flex justify-center items-center mb-4">
           <span className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-600"></span>
@@ -141,10 +141,14 @@ const EditableMemberDetailsBodyShape = ({
         ))}
       </div>
 
-      <div className="mt-6 text-right">
+      <div className="mt-6 text-right w-full">
         <button
           type="submit"
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md transition-all"
+          className="px-6 py-3 w-full rounded-xl shadow-lg text-white font-semibold
+            bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700
+            hover:from-blue-600 hover:via-blue-700 hover:to-blue-800
+            focus:outline-none focus:ring-2 focus:ring-blue-300
+            transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={loading}
         >
           {loading ? 'Saving...' : 'Save Changes'}

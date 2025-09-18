@@ -1,8 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  allowedDevOrigins: ['http://192.168.1.15', 'http://172.20.10.4','http://34.9.242.208'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: process.env.NEXT_PUBLIC_API_HOST_1 || "localhost",
+        port: process.env.NEXT_PUBLIC_API_PORT || "8000",
+        pathname: "**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

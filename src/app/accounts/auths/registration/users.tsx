@@ -15,6 +15,7 @@ const FormUserRegistration = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -38,7 +39,7 @@ const FormUserRegistration = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/accounts/registration/api/', {
+      const response = await fetch(`${API_URL}/accounts/users/api/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +57,6 @@ const FormUserRegistration = () => {
 
       if (response.ok) {
         alert('User registered successfully!');
-        console.log('Registration successful:', result);
         sessionStorage.setItem('access_token', result.access);
         sessionStorage.setItem('refresh_token', result.refresh);
         sessionStorage.setItem('user_data', JSON.stringify(result.user));

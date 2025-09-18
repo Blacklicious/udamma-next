@@ -58,10 +58,10 @@ export default function AccountPage() {
 		<>
 			<NavbarMain />
 			<AccountBottomNavBar />
-			<div className="container mx-auto p-3 lg:p-6 w-full">
+			<div className="container mx-auto p-3 lg:px-6 w-full">
 				<h1 className="text-xl font-bold ">Welcome, {user?.username}</h1>
 			</div>
-			<div className="container mx-auto p-3 lg:p-6 w-full">
+			<div className="container mx-auto p-3 lg:px-6 w-full">
 				<MemberAccountDetails/>
 			</div>
 		</>

@@ -13,6 +13,7 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState('L');
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,16 +21,19 @@ const ProductDetailPage = () => {
     const details = searchParams.get('details');
     if (details) {
       try {
-        setProduct(JSON.parse(decodeURIComponent(details)));
+        const parsed = JSON.parse(decodeURIComponent(details));
+        setProduct(parsed);
+        setSelectedImage(parsed.img1 ? `${API_URL}${parsed.img1}` : null);
         return;
       } catch {}
     }
 
     async function fetchProduct() {
-      const res = await fetch(`${API_URL}/products/${id}/`);
+      const res = await fetch(`${API_URL}/products/${id}/api/`);
       if (res.ok) {
         const data = await res.json();
         setProduct(data);
+        setSelectedImage(data.img1 ? `${API_URL}${data.img1}` : null);
       }
     }
 
@@ -38,79 +42,97 @@ const ProductDetailPage = () => {
 
   if (!product) return <div className="text-center p-6">Loading...</div>;
 
-  const images = [product.img1, product.img2, product.img3, product.img4, product.img5, product.img6]
-    .filter((img): img is string => Boolean(img));
+  const images = [
+    product.img1,
+    product.img2,
+    product.img3,
+    product.img4,
+    product.img5,
+    product.img6,
+  ].filter((img): img is string => Boolean(img));
 
   return (
     <>
       <NavbarMain />
-      <BottomNavBar />
-      <div className="max-w-md mx-auto px-4 pt-6 pb-28">
-        {/* Main Image */}
-        <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
-          <Image
-            src={product.img1 ? `${API_URL}${product.img1}` : 'https://via.placeholder.com/400x300'}
-            alt={product.name}
-            fill
-            className="object-cover rounded-xl"
-          />
-          <button className="absolute top-4 right-4 bg-white/80 px-2 py-1 rounded-full shadow">
-            ❤️
-          </button>
-        </div>
-
-        {/* Thumbnails */}
-          {images.slice(1, 5).map((img: string, index: number) => (
+      <div className='flex flex-col lg:flex-row gap-4  p-3 pb-32 w-full '>
+        <div className=" lg:w-[60%] xl:w-[45%] 2xl:w-[35%] flex flex-col lg:flex-row gap-1 bg-gray-100 p-1 rounded-3xl">
+          <div className="relative w-full lg:w-[85%] h-[70vh] rounded-3xl  shadow-md ">
+            {/* Main Image */}
             <Image
-              key={index}
-              src={`${API_URL}${img}`}
-              width={64}
-              height={64}
-              className="object-cover rounded-lg border"
-              alt={`Thumb ${index + 2}`}
+              src={selectedImage || '/img/landscape-placeholder.svg'}
+              alt={product.name}
+              fill
+              className="object-cover rounded-3xl"
             />
-          ))}
-          {images.length > 5 && (
-            <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg text-sm text-gray-600">
-              +{images.length - 5}
+            <button className="absolute top-4 right-4 bg-white/80 px-3 py-2 rounded-full shadow hover:bg-red-100 transition">
+              ❤️
+            </button>
+          </div>
+          {/* Thumbnails */}
+          {images.length > 1 && (
+            <div className="flex flex-row lg:flex-col gap-3  overflow-auto scrollbar-hide w-[100%] lg:w-[15%]
+             mt-2 lg:mt-0  lg:pr-1  lg:overflow-y-auto lg:overflow-x-hidden rounded-3xl">
+              {images.map((img, index) => (
+                <div
+                  key={index}
+                  className={`relative w-[80px] lg:w-[100%] h-[80px] flex-shrink-0 rounded-3xl overflow-hidden border cursor-pointer transition ${
+                    selectedImage === `${API_URL}${img}`
+                      ? 'border-2 border-black'
+                      : 'hover:scale-105'
+                  }`}
+                  onClick={() => setSelectedImage(`${API_URL}${img}`)}
+                >
+                  <Image
+                    src={`${API_URL}${img}`}
+                    alt={`Thumb ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
             </div>
           )}
+      </div>
+      <div className='w-[100%] lg:w-[40%] xl:w-[55%] 2xl:w-[65%] bg-gray-100 p-4 rounded-3xl shadow-md h-min'>
+        {/* Product Info */}
+        <div className="mt-6 space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
+            <div className="flex items-center gap-4 text-sm text-gray-500 mt-2">
+              <span>⭐ 4.8</span>
+              <span>• 1.5k Reviews</span>
+              <span>• 3.4k Sold</span>
+            </div>
+          </div>
         </div>
 
-        {/* Product Info */}
-        <div className="mt-4">
-          <h1 className="text-xl font-bold">{product.name}</h1>
-          <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-            <span>⭐ 4.8</span>
-            <span>• 1.5k Reviews</span>
-            <span>• 3.4k Sold</span>
-          </div>
-
-          <div className="mt-2 flex items-center gap-2">
-            <span className="text-2xl font-bold text-gray-900">${product.price}</span>
+          {/* Price */}
+          <div className="flex items-center gap-3">
+            <span className="text-3xl font-bold text-gray-900">${product.price}</span>
             {product.price_discount && (
               <>
                 <span className="line-through text-gray-400">${product.price_discount}</span>
-                <span className="text-sm text-red-500 font-semibold">15%</span>
+                <span className="text-sm text-red-500 font-semibold">15% OFF</span>
               </>
             )}
           </div>
 
-          <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+          {/* Description */}
+          <p className="text-sm text-gray-600 leading-relaxed">
             {product.description || 'No description available.'}
           </p>
 
           {/* Sizes */}
-          <div className="mt-4">
-            <h4 className="text-sm font-medium mb-2">Select Size</h4>
-            <div className="flex gap-2">
-              {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+          <div>
+            <h4 className="text-sm font-semibold mb-3">Select Size</h4>
+            <div className="flex gap-2 lg:gap-4 justify-start">
+              {['S', 'M', 'L', 'XL', 'XXL', 'Custom'].map((size) => (
                 <button
                   key={size}
-                  className={`w-10 h-10 rounded-full border text-sm font-medium ${
+                  className={`px-3 py-2 rounded-2xl border text-sm font-medium transition ${
                     selectedSize === size
-                      ? 'bg-black text-white'
-                      : 'bg-white text-black border-gray-300'
+                      ? 'bg-black text-white shadow'
+                      : 'bg-white text-black border-gray-300 hover:border-black'
                   }`}
                   onClick={() => setSelectedSize(size)}
                 >
@@ -121,27 +143,29 @@ const ProductDetailPage = () => {
           </div>
 
           {/* Quantity + Add to Cart */}
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center justify-between mt-8 gap-3 text-black">
             <div className="flex items-center border rounded-full overflow-hidden">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-3 py-1 text-lg font-bold"
+                className="px-4 py-2 text-lg font-bold hover:bg-gray-100"
               >
                 -
               </button>
-              <span className="px-4 py-1 text-sm">{quantity}</span>
+              <span className="px-5 py-2 text-sm">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="px-3 py-1 text-lg font-bold"
+                className="px-4 py-2 text-lg font-bold hover:bg-gray-100"
               >
                 +
               </button>
             </div>
-            <button className="ml-4 flex-1 bg-black text-white rounded-full py-3 px-6 text-sm font-medium shadow-lg">
+            <button className="flex-1 bg-black text-white rounded-full py-4 text-sm font-semibold shadow-lg hover:bg-gray-800 transition">
               ADD TO CART
             </button>
           </div>
         </div>
+      </div>
+      <BottomNavBar />
     </>
   );
 };

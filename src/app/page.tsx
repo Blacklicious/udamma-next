@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { motion } from "framer-motion";
 import NavbarMain from "@/components/navbar/main";
@@ -13,7 +13,7 @@ export default function Home() {
         <NavbarMain />
 
         {/* 🌟 Hero Section */}
-        <section className="relative bg-[#F9F6F1] text-gray-900 px-6 py-24 text-center overflow-hidden">
+        <section className="relative bg-[#F9F6F1] text-gray-900 px-6 pt-24 lg:py-24 text-center overflow-hidden z-10">
           <motion.h1
             className="text-5xl md:text-6xl font-extrabold leading-tight"
             initial={{ opacity: 0, y: 50 }}
@@ -43,7 +43,9 @@ export default function Home() {
         </section>
 
         {/* 🛍 Store Section */}
-        <StorePage />
+        <section>
+          <StorePage />
+        </section>
 
         {/* 🌿 Brand Story Section */}
         <section className="px-6 py-20 bg-white">
@@ -184,10 +186,9 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
-
         <BottomNavBar />
+        <PageFooter />
       </main>
-      <PageFooter />
     </div>
   );
 }

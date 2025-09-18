@@ -45,9 +45,9 @@ const BoutiqueAccount = () => {
   //const handleShowReturns = () => { setShowReturns(!showReturns); setShowProducts(false); setShowCustomers(false); setShowQuotes(false); setShowOrders(false); setShowInvoices(false); setShowPayments(false); setShowShipping(false); }
 
   return (
-    <div className='boutique-account-page w-full px-2 bg-[#F9F6F1] rounded-3xl pb-6'>
-            <NavbarMain />
-            <BottomNavBar />
+    <div className='boutique-account-page w-full px-2 bg-[#F9F6F1] pb-6 min-h-screen text-black'>
+      <NavbarMain />
+      <BottomNavBar />
       <div className='boutique-navbar px-4 mt-3'>
         <div className='flex justify-around overflow-x-auto gap-3 font-semibold text-gray-600 bg-gray-100 p-2 rounded-xl shadow-sm custom-scrollbar'>
           <div

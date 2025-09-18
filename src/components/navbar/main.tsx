@@ -26,6 +26,7 @@ export default function NavbarMain() {
                     alt="Logo"
                     width={56}
                     height={56}
+                    priority
                     className="h-14 lg:h-20 w-auto bg-white rounded-2xl border-2 border-amber-300 cursor-pointer"
                   />
               </div>

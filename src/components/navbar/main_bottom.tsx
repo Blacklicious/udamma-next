@@ -30,12 +30,19 @@ export default function BottomNavBar() {
     // Use React hooks to manage state
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	// determine if the current user is an employee
+	const [, setIsUser] = useState(false);
 	const [ isEmployee, setIsEmployee ] = useState(false);
 	// Check if the user is an employee (this could be based on user data or role)
 	React.useEffect(() => {
 		const userData = sessionStorage.getItem("user_data");
 		if (userData) {
-			setIsEmployee(true); // Assuming userData contains employee info
+			setIsUser(true); // Assuming userData contains user info
+			const parsedData = JSON.parse(userData);
+			if (["employee", "business", "admin"].includes(parsedData.role)) {
+				setIsEmployee(true)
+			} else {
+				setIsEmployee(false)
+			}
 		} else {
 			setIsEmployee(false); // Default to false if no user data
 		}

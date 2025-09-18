@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import ProductUpdateForm from './productUpdateForm';
+import ProductDeleteForm from './ProductDelete';
 
 export interface Category {
   id: number;
@@ -93,22 +94,30 @@ const ProductsManagerList = () => {
     return <div className="p-6 text-center text-gray-400">No products found.</div>;
   }
   return (
-    <div className="p-1 text-black">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Your Products</h2>
+    <div className="p-1 text-black rounded-2xl">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-20 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 3xl:grid-cols-10 4xl:grid-cols-12">
         {products.map((product) => (
           <div
             key={product.id}
-            className="h-max group cursor-pointer bg-white rounded-xl shadow-md hover:shadow-xl  hover:ring-2 hover:ring-yellow-500
+            className="h-max group cursor-pointer bg-white border-2 border-gray-200 rounded-xl shadow-md hover:shadow-xl  hover:ring-2 hover:ring-yellow-500
             transition-all duration-200 p-1 w-full max-w-md"
           >
-           
-  
+            {/* Image */}
+            {product.img2 && (
+              <Image
+                src={`${API_URL}${product.img2}`}
+                alt={product.name}
+                className="w-full object-cover rounded-md mb-1 "
+                width={400}
+                height={400}
+                priority
+              />
+            )}
             {/* Title */}
-            <h3 className="text-lg font-bold text-gray-900 mb-2">{product.name}</h3>
+            <h3 className="text-lg font-bold text-gray-900 pl-1">{product.name}</h3>
   
             {/* Details Row */}
-            <div className="flex justify-between items-center text-sm text-gray-500 mb-1">
+            <div className="flex justify-between items-center text-sm text-gray-500 mb-1 pl-2">
               <div className="hidden  items-center gap-1">
                 <span className="material-icons text-base">location_on</span>
                 <span>{product.boutique}</span>
@@ -118,17 +127,7 @@ const ProductsManagerList = () => {
               ) : (
                 <span>Uncategorized</span>
               )}
-                </div>
-            {/* Image */}
-            {product.img2 && (
-              <Image
-                src={`${API_URL}${product.img2}`}
-                alt={product.name}
-                className="w-full object-cover rounded-md my-3"
-                width={400}
-                height={400}
-              />
-            )}
+            </div>
   
             {/* Price + Quantity */}
             <div className="flex justify-between items-center text-sm text-gray-600">
@@ -138,14 +137,16 @@ const ProductsManagerList = () => {
   
             {/* CTA: show Update / Delete on hover */}
             <div className=" flex justify-between p-1 w-full bg-gray-100 rounded-xl mt-2 gap-1">
-              < ProductUpdateForm product={product} />
-              <button
+              <div className="w-[50%]">
+                < ProductUpdateForm product={product} />
+              </div>
+              <div
                 onClick={() => console.log('Delete', product.id)}
-                className="flex-1 text-sm font-medium text-black bg-red-300 hover:bg-red-700
-                  w-1/2 rounded-lg py-2 transition-colors"
+                className="flex-1 text-sm font-medium text-black
+                  w-[50%] rounded-lg "
               >
-                Delete
-              </button>
+                < ProductDeleteForm product={product} />
+              </div>
             </div>
           </div>
         ))}
